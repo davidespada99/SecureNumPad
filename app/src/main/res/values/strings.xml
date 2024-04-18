@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SecureNumPad</string>
+    <string name="register">Register</string>
+    <string name="log_in">Log in</string>
+</resources>

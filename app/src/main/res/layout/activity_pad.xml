@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/display_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:gravity="center_horizontal"
+        android:padding="16dp"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/display_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:gravity="center_horizontal"
+        android:hint="Inserisci il pin"
+        android:inputType="number"
+        android:padding="16dp"
+        android:textSize="20sp" />
+
+
+    <GridLayout
+        android:id="@+id/pinpad_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:rowCount="4">
+
+        <!-- Buttons tagged with "button" -->
+        <Button
+            android:id="@+id/button0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"
+            />
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="20dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="10dp"
+            android:tag="button"
+            android:onClick="onClicked"
+            android:textSize="30sp"
+            />
+
+        <Button
+            android:id="@+id/button7"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="onClicked"
+            android:padding="20dp"
+            android:tag="button"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="onClicked"
+            android:padding="20dp"
+            android:tag="button"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_margin="10dp"
+            android:onClick="onClicked"
+            android:padding="20dp"
+            android:tag="button"
+            android:textSize="30sp"/>
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/arrow_left"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:onClick="changeUser"
+            android:tag="-1"
+            android:text="&lt;" />
+
+        <TextView
+            android:id="@+id/selected_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:text="1"
+            android:textSize="24sp" />
+
+        <Button
+
+            android:id="@+id/arrow_right"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:onClick="changeUser"
+            android:tag="1"
+            android:text=">" />
+
+    </LinearLayout>
+
+</LinearLayout>
