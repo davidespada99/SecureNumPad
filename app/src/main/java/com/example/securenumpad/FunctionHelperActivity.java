@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class FunctionHelperActivity extends AppCompatActivity {
 
@@ -101,6 +105,18 @@ public class FunctionHelperActivity extends AppCompatActivity {
         bw.write(content);
         bw.close();
     }
+
+    //Output a random 4 digits PIN
+    public String randomPIN(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(10000);
+        return String.format(Locale.getDefault(), "%04d", randomNumber);
+    }
+
+
+
+
+
 
 
     public void testHelper(){

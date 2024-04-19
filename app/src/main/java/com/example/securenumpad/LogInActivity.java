@@ -33,7 +33,7 @@ public class LogInActivity extends AppCompatActivity {
         FunctionHelperActivity helperActivity = new FunctionHelperActivity();
         ViewGroup rootLayout = findViewById(android.R.id.content);
         //display_text box
-        View displayTextView = findViewById(R.id.display_text);
+        View displayTextView = findViewById(R.id.display_pin);
         EditText displayText = (EditText) displayTextView;
 
         //button
@@ -51,6 +51,13 @@ public class LogInActivity extends AppCompatActivity {
         }
 
         displayText.setText(textToWrite);
+    }
+
+    public void changeUser(View view) {
+        FunctionHelperActivity helperActivity = new FunctionHelperActivity();
+        TextView userIdText = findViewById(R.id.selected_number);
+        helperActivity.changeUser(view, userIdText);
+
     }
 
 
