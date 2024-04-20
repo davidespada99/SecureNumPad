@@ -38,7 +38,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
         Integer[] integerNumbers = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
 
 //        Shuffle the array
-        Collections.shuffle(Arrays.asList(integerNumbers));
+        //Collections.shuffle(Arrays.asList(integerNumbers));
 
 //        setId() for each button in ascending order
         int id=0;
@@ -88,18 +88,21 @@ public class FunctionHelperActivity extends AppCompatActivity {
         FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
         BufferedWriter bw = new BufferedWriter(fw);
 
-        //Log.d("FILEDIT", String.valueOf(file.getAbsoluteFile()));
-
-        if (!file.exists()) {
+        if(!file.exists()){
+            // If file doesn't exist, create it
             try {
-                file.createNewFile();
+                if (file.createNewFile()) {
+                    Log.d("File", "file created");
+                } else {
+                    Log.d("File", "file NOT created");
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw  new  RuntimeException(e);
             }
         }
 
         if(file.length()<=0){
-            bw.write("UserID, buttonID, attempt_num, getSize\n");
+            bw.write("getSize, UserID, attempt_num, buttonID, buttonNumber\n");
         }
 
         bw.write(content);
