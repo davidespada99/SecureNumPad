@@ -147,11 +147,13 @@ public class RegisterActivity extends AppCompatActivity {
         //set new global variables and update data
         totalAttemps = 3;
         randomPIN = helperActivity.randomPIN();
+        logData = "";
 
         View displayDataView = findViewById(R.id.display_data);
         EditText displayData = (EditText) displayDataView;
         View displayPinView = findViewById(R.id.display_pin);
         EditText displayPin = (EditText) displayPinView;
+        displayPin.setText("");
 
         updatePinData(displayData, displayPin);
     }
