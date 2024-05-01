@@ -15,32 +15,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
-    int totalAttemps = 3;
-    FunctionHelperActivity helperActivity = new FunctionHelperActivity();
-    String randomPIN = helperActivity.randomPIN();
+    private final int NUMBEROFREGISTRATION = 10;
+    private int currentNumberOfRegistration = 0;
+    String randomPIN = FunctionHelperActivity.randomPIN();
+    private int currentUserId = FunctionHelperActivity.getCurrentUserId();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pad);
-
-        FunctionHelperActivity helperActivity = new FunctionHelperActivity();
-
         ViewGroup rootLayout = findViewById(android.R.id.content);
-        helperActivity.initializeButtons(rootLayout);
-
+        FunctionHelperActivity.initializeButtons(rootLayout);
         View displayDataView = findViewById(R.id.display_data);
         EditText displayData = (EditText) displayDataView;
         View displayPinView = findViewById(R.id.display_pin);
         EditText displayPin = (EditText) displayPinView;
-
         updatePinData(displayData, displayPin);
     }
 
 
 
     String logData = "";
-    public void onClicked(View v) throws IOException {
-        FunctionHelperActivity helperActivity = new FunctionHelperActivity();
+    public void onButtonClicked(View v) throws IOException {
         ViewGroup rootLayout = findViewById(android.R.id.content);
 
         //button
@@ -58,16 +53,11 @@ public class RegisterActivity extends AppCompatActivity {
         EditText displayData = (EditText) displayDataView;
 
 
-        updateDisplayPin(displayPin, rootLayout, buttonNumber);
+        updateDisplayPin(displayPin, buttonNumber);
         updatePinData(displayData, displayPin);
 
-        //Get current USer ID
-        TextView userIdText = findViewById(R.id.selected_number);
-        int currUserId = Integer.parseInt(String.valueOf(userIdText.getText()));
 
-
-        logData += String.valueOf(currUserId) + ","
-                + totalAttemps + ","
+        logData += String.valueOf(currentUserId) + ","
                 + buttonId + ","
                 + buttonNumber + "\n";
         Log.i("logdata", logData);
@@ -75,12 +65,12 @@ public class RegisterActivity extends AppCompatActivity {
         //write in csv only if right pin!
         if(displayPin.getText().length()==4 && displayPin.getText().toString().equals(randomPIN)) {
             //Log data in csv
-            helperActivity.csvWriter(logData);
+            FunctionHelperActivity.csvWriter(logData);
             Log.i("logdata", "written");
             logData = "";
 
             //Update display data
-            updateAttemps(displayData);
+            updateAttempts(displayData);
         } else if (displayPin.getText().length()==4 && !displayPin.getText().toString().equals(randomPIN)) {
             Log.i("logdata", "NOT written");
             logData = "";
@@ -90,37 +80,36 @@ public class RegisterActivity extends AppCompatActivity {
     //--------------------INSERT INTO FUNCTION HELPER !!!!
 
     public void updatePinData(EditText displayData, EditText displayPin){
-        String text = "";
-        if(totalAttemps > 0) {
-            text = "Insert the following PIN " + String.valueOf(totalAttemps) + " times: \n" + String.valueOf(randomPIN);
-        }
-        displayData.setText(text);
+        if(currentNumberOfRegistration < NUMBEROFREGISTRATION) {
+            String text = "";
+            text = "Insert the following PIN " + String.valueOf(NUMBEROFREGISTRATION) + " times: \n" + String.valueOf(randomPIN);
+            displayData.setText(text);
 
-        if(displayPin.getText().length()==4 && displayPin.getText().toString().equals(randomPIN)){
-            //Display error message
-            Toast.makeText(getApplicationContext(), "Right PIN! ", Toast.LENGTH_SHORT).show();
+            if (displayPin.getText().length() == 4 && displayPin.getText().toString().equals(randomPIN)) {
+                //Display error message
+                Toast.makeText(getApplicationContext(), "Right PIN! ", Toast.LENGTH_SHORT).show();
+                currentNumberOfRegistration++;
 
-        } else if (displayPin.getText().length()==4 && !displayPin.getText().toString().equals(randomPIN)) {
-            //Display error message
-            Toast.makeText(getApplicationContext(), "Wrong PIN! ", Toast.LENGTH_SHORT).show();
-            //Delete last 4 lines from csv;
+            } else if (displayPin.getText().length() == 4 && !displayPin.getText().toString().equals(randomPIN)) {
+                //Display error message
+                Toast.makeText(getApplicationContext(), "Wrong PIN! ", Toast.LENGTH_SHORT).show();
+                //Delete last 4 lines from csv;
+            }
         }
     }
-    private void updateAttemps(EditText displayData) {
-        if(totalAttemps>0) totalAttemps--;
-        String text = "Insert the following PIN "+ String.valueOf(totalAttemps) +" times: \n" + String.valueOf(randomPIN);
+    private void updateAttempts(EditText displayData) {
+
+        String text = "Insert the following PIN "+ String.valueOf(currentNumberOfRegistration) +" times: \n" + String.valueOf(randomPIN);
         displayData.setText(text);
     }
 
-    public void updateDisplayPin(EditText displayPin, ViewGroup rootLayout, String buttonNumber) {
+    public void updateDisplayPin(EditText displayPin, String buttonNumber) {
         String pinToWrite = String.valueOf(displayPin.getText()) + buttonNumber;
         //if pinView > 4 --> reset to the current number pressed
         if(pinToWrite.length() > 4 ) pinToWrite = buttonNumber;
 
         displayPin.setText(pinToWrite);
 
-        //Re-initialize buttons with shuffle
-        if(pinToWrite.length() == 4) helperActivity.initializeButtons(rootLayout);
     }
 
     //--------------------INSERT INTO FUNCTION HELPER !!!!
@@ -139,22 +128,5 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public void changeUser(View view) {
-        FunctionHelperActivity helperActivity = new FunctionHelperActivity();
-        TextView userIdText = findViewById(R.id.selected_number);
-        helperActivity.changeUser(view, userIdText);
 
-        //set new global variables and update data
-        totalAttemps = 3;
-        randomPIN = helperActivity.randomPIN();
-        logData = "";
-
-        View displayDataView = findViewById(R.id.display_data);
-        EditText displayData = (EditText) displayDataView;
-        View displayPinView = findViewById(R.id.display_pin);
-        EditText displayPin = (EditText) displayPinView;
-        displayPin.setText("");
-
-        updatePinData(displayData, displayPin);
-    }
 }

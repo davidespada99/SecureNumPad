@@ -24,7 +24,28 @@ import java.util.Random;
 
 public class FunctionHelperActivity extends AppCompatActivity {
 
-    public void initializeButtons(ViewGroup rootLayout ) {
+    private static boolean isRealUser = true;
+    private static int currentUserId = 1;
+    public static boolean isIsRealUser() {
+        return isRealUser;
+    }
+
+    public static void setIsRealUser(boolean isRealUser) {
+        FunctionHelperActivity.isRealUser = isRealUser;
+    }
+
+
+
+    public static int getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public static void setCurrentUserId(int currentUserId) {
+        FunctionHelperActivity.currentUserId = currentUserId;
+    }
+
+
+    public static void initializeButtons(ViewGroup rootLayout) {
         String buttonTag = "button";
         List<View> buttons = findViewsByTag(rootLayout, buttonTag);
 
@@ -35,8 +56,8 @@ public class FunctionHelperActivity extends AppCompatActivity {
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 
 //        Convert int array to Integer array
-        Integer[] integerNumbers = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
-
+        //Integer[] integerNumbers = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
+        int[] integerNumbers = numbers;
 //        Shuffle the array
         //Collections.shuffle(Arrays.asList(integerNumbers));
 
@@ -56,7 +77,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
         }
     }
 
-    private List<View> findViewsByTag(ViewGroup root, String tag) {
+    private static List<View> findViewsByTag(ViewGroup root, String tag) {
         List<View> views = new ArrayList<>();
         final int childCount = root.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -72,7 +93,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
         return views;
     }
 
-    public void changeUser(View v, TextView userIdText) {
+    public static void changeUser(View v, TextView userIdText) {
         int currId = Integer.parseInt(String.valueOf(userIdText.getText()));
         String tag = String.valueOf(v.getTag());
 
@@ -83,7 +104,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
         }
     }
 
-    public void csvWriter( String content ) throws IOException {
+    public static void csvWriter(String content) throws IOException {
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "logData.csv");
         FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
         BufferedWriter bw = new BufferedWriter(fw);
@@ -110,7 +131,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
     }
 
     //Output a random 4 digits PIN
-    public String randomPIN(){
+    public static String randomPIN(){
         Random random = new Random();
         int randomNumber = random.nextInt(10000);
         return String.format(Locale.getDefault(), "%04d", randomNumber);

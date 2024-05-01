@@ -2,7 +2,12 @@ package com.example.securenumpad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +16,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class HomeActivity extends AppCompatActivity {
+
+    int currentUserId = 1;
+    boolean isRealUser = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,35 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("ACTION", "LOGIN"); // Add extra data if needed
             startActivity(intent);
         });
+
+    }
+
+    public void incrementNumber(View view) {
+        TextView userIdTextView = findViewById(R.id.user_id_textview);
+        int currentUserId = Integer.parseInt(String.valueOf(userIdTextView.getText()));
+        int updatedUserId = ++currentUserId;
+        userIdTextView.setText( String.valueOf(updatedUserId) );
+        FunctionHelperActivity.setCurrentUserId(updatedUserId);
+
+    }
+
+    public void decrementNumber(View view) {
+        TextView userIdTextView = findViewById(R.id.user_id_textview);
+        int currentUserId = Integer.parseInt(String.valueOf(userIdTextView.getText()));
+
+        if(currentUserId > 1){
+            int updatedUserId = --currentUserId;
+            userIdTextView.setText( String.valueOf(updatedUserId) );
+            FunctionHelperActivity.setCurrentUserId(updatedUserId);
+        }
+
+
+    }
+
+    public void swapRealUser(View view) {
+        boolean switchValue = ((Switch)view).isChecked();
+        FunctionHelperActivity.setIsRealUser(switchValue);
+
 
     }
 }

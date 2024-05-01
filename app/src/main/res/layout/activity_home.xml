@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-
+    <!-- Register Button -->
     <Button
         android:id="@+id/register_button"
         android:layout_width="150dp"
@@ -15,6 +15,7 @@
         android:text="@string/register"
         android:textSize="20sp" />
 
+    <!-- Login Button -->
     <Button
         android:id="@+id/login_button"
         android:layout_width="150dp"
@@ -24,5 +25,55 @@
         android:layout_marginTop="16dp"
         android:text="@string/log_in"
         android:textSize="20sp" />
+
+    <!-- Decrement Button -->
+    <Button
+        android:id="@+id/increment_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_button"
+        android:layout_marginEnd="16dp"
+        android:text="+"
+        android:textSize="20sp"
+        android:onClick="incrementNumber"
+        android:layout_alignParentEnd="true"/>
+
+
+    <!-- Number TextView -->
+    <TextView
+        android:id="@+id/user_id_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_button"
+        android:layout_centerHorizontal="true"
+        android:text="1"
+        android:background="@drawable/number_selector"
+        android:textSize="20sp"
+        android:padding="8dp" />
+
+
+
+    <!-- Increment Button -->
+    <Button
+        android:id="@+id/decrement_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_button"
+        android:layout_marginStart="16dp"
+        android:text="-"
+        android:textSize="20sp"
+        android:onClick="decrementNumber"
+        android:layout_alignParentStart="true"/>
+
+
+    <Switch
+        android:id="@+id/slide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_id_textview"
+        android:layout_centerHorizontal="true"
+        android:checked="true"
+        android:onClick="swapRealUser"
+        />
 
 </RelativeLayout>

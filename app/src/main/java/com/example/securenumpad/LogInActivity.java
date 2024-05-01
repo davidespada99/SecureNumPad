@@ -22,7 +22,7 @@ public class LogInActivity extends AppCompatActivity {
 
         FunctionHelperActivity helperActivity = new FunctionHelperActivity();
         ViewGroup rootLayout = findViewById(android.R.id.content);
-        helperActivity.initializeButtons(rootLayout);
+        FunctionHelperActivity.initializeButtons(rootLayout);
 
         // Retrieve the intent
         Intent intent = getIntent();
@@ -47,17 +47,15 @@ public class LogInActivity extends AppCompatActivity {
 
         if(textToWrite.length() >= 4 ){
             textToWrite = "";
-            helperActivity.initializeButtons(rootLayout);
+            FunctionHelperActivity.initializeButtons(rootLayout);
         }
 
         displayText.setText(textToWrite);
     }
 
     public void changeUser(View view) {
-        FunctionHelperActivity helperActivity = new FunctionHelperActivity();
-        TextView userIdText = findViewById(R.id.selected_number);
-        helperActivity.changeUser(view, userIdText);
-
+        Log.d("DBisRealUser", String.valueOf(FunctionHelperActivity.isIsRealUser()));
+        Log.d("DBcurrentUserId", String.valueOf(FunctionHelperActivity.getCurrentUserId()));
     }
 
 
