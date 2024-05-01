@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,38 @@ public class FunctionHelperActivity extends AppCompatActivity {
 
     private static boolean isRealUser = true;
     private static int currentUserId = 1;
+    private static String currentInsertedPin = "";
+    private static String pinToInsert = "";
+
+
+
+    private static String logDataToCSV = "";
+
+    public static String getCurrentInsertedPin() {
+        return currentInsertedPin;
+    }
+
+    public static void setCurrentInsertedPin(String tempCurrentInsertedPin) {
+        currentInsertedPin = tempCurrentInsertedPin;
+    }
+
+    public static String getLogDataToCSV() {
+        return logDataToCSV;
+    }
+
+    public static void setLogDataToCSV(String logDataToCSV) {
+        FunctionHelperActivity.logDataToCSV = logDataToCSV;
+    }
+
+    public static String getPinToInsert() {
+        return pinToInsert;
+    }
+
+    public static void setPinToInsert(String pinToInsert) {
+        FunctionHelperActivity.pinToInsert = pinToInsert;
+    }
+
+
     public static boolean isIsRealUser() {
         return isRealUser;
     }
@@ -104,7 +137,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
         }
     }
 
-    public static void csvWriter(String content) throws IOException {
+    public static void csvWriter() throws IOException {
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "logData.csv");
         FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
         BufferedWriter bw = new BufferedWriter(fw);
@@ -126,7 +159,7 @@ public class FunctionHelperActivity extends AppCompatActivity {
             bw.write("getSize, UserID, attempt_num, buttonID, buttonNumber\n");
         }
 
-        bw.write(content);
+        bw.write(getLogDataToCSV());
         bw.close();
     }
 
@@ -134,7 +167,8 @@ public class FunctionHelperActivity extends AppCompatActivity {
     public static String randomPIN(){
         Random random = new Random();
         int randomNumber = random.nextInt(10000);
-        return String.format(Locale.getDefault(), "%04d", randomNumber);
+        pinToInsert = String.format(Locale.getDefault(), "%04d", randomNumber);
+        return pinToInsert;
     }
 
 
@@ -145,5 +179,9 @@ public class FunctionHelperActivity extends AppCompatActivity {
 
     public void testHelper(){
         Log.d("TestHelper", "WORKS!!!");
+        EditText textData = (EditText) findViewById(R.id.display_data);
     }
+
+
+
 }
