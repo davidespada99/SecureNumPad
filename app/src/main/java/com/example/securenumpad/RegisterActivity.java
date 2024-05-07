@@ -14,12 +14,26 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
-    private final int NUMBEROFREGISTRATION = 3;
+    private final int NUMBEROFREGISTRATION = 10;
     private int currentNumberOfRegistration = 0;
     String randomPIN = FunctionHelperActivity.randomPIN();
     private int currentUserId = FunctionHelperActivity.getCurrentUserId();
+
+    private ArrayList<Integer> sampleNumbers = new ArrayList<>(Arrays.asList(1, 2, 5, 10));
+
+    private ArrayList<Double> means;
+    private ArrayList<Double> vars;
+
+
+
+    private ArrayList<Double> sizes;
+    private ArrayList<Double> tempSizes;
+
 
 
 
@@ -32,6 +46,10 @@ public class RegisterActivity extends AppCompatActivity {
         ViewGroup rootLayout = findViewById(android.R.id.content);
         FunctionHelperActivity.initializeButtons(rootLayout);
         updatePinData(randomPIN);
+        means = new ArrayList<>();
+        vars = new ArrayList<>();
+        sizes = new ArrayList<>();
+        tempSizes = new ArrayList<>();
         //=============================================== AddUserEntry() aggiungo utente e pin al file di match tra pin e utente  =============================================== //
             //Controllo se l'id esiste già lo sovrascrivo
             //Controllo se il file User{id}Stats.csv esiste già, lo elimino e creo nuovo file
@@ -71,22 +89,36 @@ public class RegisterActivity extends AppCompatActivity {
                 FunctionHelperActivity.csvWriter();
                 Log.i("ToWriteCSV", FunctionHelperActivity.getLogDataToCSV());
                 Log.i("logdata", "written in CSV");
+                sizes.addAll(tempSizes);
+
+
+                if ( sampleNumbers.contains(currentNumberOfRegistration + 1) ){
+
+                    means.add(FunctionHelperActivity.Mean(sizes));
+                    vars.add(FunctionHelperActivity.Var(sizes));
+                    Log.d("meansvarsizes", String.valueOf(sizes));
+                    Log.d("meansvar", String.valueOf(means));
+                    Log.d("meansvars", String.valueOf(vars));
+
+                }
+
                 //Update display data
                 updateAttempts();
             }
-            else {
-                Log.i("logdata", "NOT written in csv");
-            }
+
             //If we inserted NUMBEROFREGISTRATION times the correct PIN, we finished the registration and come back to the home activity
             if(currentNumberOfRegistration == NUMBEROFREGISTRATION){
                 // ================================================ createUserStatsCSV(); ================================================
                 Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                FunctionHelperActivity.csvWriterStats(currentUserId, randomPIN, means, vars);
                 startActivity(intent);
             }
             logData = "";
             FunctionHelperActivity.setCurrentInsertedPin("");
             FunctionHelperActivity.setLogDataToCSV("");
+            tempSizes.clear();
         }
+
     }
 
     //--------------------INSERT INTO FUNCTION HELPER !!!!
@@ -136,9 +168,11 @@ public class RegisterActivity extends AppCompatActivity {
         String toLog = "";
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            toLog = String.valueOf(event.getSize()) + ",";
+            double size = event.getSize();
+            toLog = String.valueOf(size) + ",";
             FunctionHelperActivity.setLogDataToCSV(FunctionHelperActivity.getLogDataToCSV() + toLog);
-            Log.i("logdata_dispatch", toLog);
+            tempSizes.add(size);
+
         }
 
         return super.dispatchTouchEvent(event);

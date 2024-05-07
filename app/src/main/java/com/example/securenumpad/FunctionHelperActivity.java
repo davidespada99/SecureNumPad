@@ -163,6 +163,43 @@ public class FunctionHelperActivity extends AppCompatActivity {
         bw.close();
     }
 
+    public static void csvWriterStats(int UserId, String pin ,ArrayList means, ArrayList vars) throws IOException {
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "UserStatistics.csv");
+        FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        int l = 0;
+        if(!file.exists()){
+            // If file doesn't exist, create it
+            try {
+                if (file.createNewFile()) {
+                    Log.d("File", "file created");
+                } else {
+                    Log.d("File", "file NOT created");
+                }
+            } catch (IOException e) {
+                throw  new  RuntimeException(e);
+            }
+        }
+
+        if(file.length()<=0){
+            bw.write("UserID, PIN, Mean1, Mean2, Mean5, Mean10, Var1, Var2, Var5, Var10\n");
+        }
+        String toWriteOnCsv = "";
+        toWriteOnCsv = UserId + "," + pin;
+        for(Object mean : means){
+            toWriteOnCsv += "," + String.valueOf(means);
+        }
+        for(Object var : vars){
+            toWriteOnCsv += "," + var;
+        }
+        toWriteOnCsv += "\n";
+
+        bw.write(toWriteOnCsv);
+        Log.d("WRITINGCSV", "csvWriterStats: " + toWriteOnCsv);
+        bw.close();
+    }
+
+
     //Output a random 4 digits PIN
     public static String randomPIN(){
         Random random = new Random();
@@ -173,14 +210,31 @@ public class FunctionHelperActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-    public void testHelper(){
-        Log.d("TestHelper", "WORKS!!!");
-        EditText textData = (EditText) findViewById(R.id.display_data);
+    public static double Mean(ArrayList<Double> data){
+        int length = data.size();
+        double mean = 0;
+        for (double val : data ){
+            mean += val;
+        }
+        return mean / (float)length;
     }
+
+    public static double Var(List<Double> data){
+        int length = data.size();
+        double mean = 0;
+        double var = 0;
+        for (double val : data ){
+            mean += val;
+        }
+        mean = mean / (float)length;
+
+        for (double val : data ){
+            var = Math.pow((val - mean), 2);
+        }
+
+        return var / (float) length;
+    }
+
 
 
 
