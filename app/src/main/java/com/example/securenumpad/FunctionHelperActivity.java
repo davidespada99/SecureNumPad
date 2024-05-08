@@ -172,9 +172,9 @@ public class FunctionHelperActivity extends AppCompatActivity {
             // If file doesn't exist, create it
             try {
                 if (file.createNewFile()) {
-                    Log.d("File", "file created");
+                    Log.d("csvWriterStats", "file created");
                 } else {
-                    Log.d("File", "file NOT created");
+                    Log.d("csvWriterStats", "file NOT created");
                 }
             } catch (IOException e) {
                 throw  new  RuntimeException(e);
@@ -184,17 +184,23 @@ public class FunctionHelperActivity extends AppCompatActivity {
         if(file.length()<=0){
             bw.write("UserID, PIN, Mean1, Mean2, Mean5, Mean10, Var1, Var2, Var5, Var10\n");
         }
-        String toWriteOnCsv = "";
-        toWriteOnCsv = UserId + "," + pin;
+        StringBuilder toWriteOnCsv = new StringBuilder();
+        Log.d("means", String.valueOf(means));
+        Log.d("vars", String.valueOf(vars));
+        toWriteOnCsv = new StringBuilder(UserId + "," + pin);
+
+
+
+
         for(Object mean : means){
-            toWriteOnCsv += "," + String.valueOf(means);
+            toWriteOnCsv.append(",").append(String.valueOf(mean));
         }
         for(Object var : vars){
-            toWriteOnCsv += "," + var;
+            toWriteOnCsv.append(",").append(String.valueOf(var));
         }
-        toWriteOnCsv += "\n";
+        toWriteOnCsv.append("\n");
 
-        bw.write(toWriteOnCsv);
+        bw.write(toWriteOnCsv.toString());
         Log.d("WRITINGCSV", "csvWriterStats: " + toWriteOnCsv);
         bw.close();
     }

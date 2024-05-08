@@ -61,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
         Button button = (Button) v;
         String buttonId = String.valueOf(button.getId());
         String buttonNumber = (String) button.getText();
-        Log.d("button_ID --> ButtonNumber", buttonId + " --> " + buttonNumber);
 
         //Aggiorna il PIN
         FunctionHelperActivity.setCurrentInsertedPin(FunctionHelperActivity.getCurrentInsertedPin() + buttonNumber);
@@ -76,19 +75,14 @@ public class RegisterActivity extends AppCompatActivity {
                 + buttonNumber + "\n";
 
         FunctionHelperActivity.setLogDataToCSV(FunctionHelperActivity.getLogDataToCSV() + logData);
-        Log.i("logdata", FunctionHelperActivity.getLogDataToCSV());
 
 
         //Handler of the PIN when reach the desired length
-
-
         if(FunctionHelperActivity.getCurrentInsertedPin().length()==4) {
             //write in csv only if right pin!
             if(FunctionHelperActivity.getCurrentInsertedPin().equals(randomPIN)) {
                 //Log data in csv
-                FunctionHelperActivity.csvWriter();
-                Log.i("ToWriteCSV", FunctionHelperActivity.getLogDataToCSV());
-                Log.i("logdata", "written in CSV");
+                //FunctionHelperActivity.csvWriter();
                 sizes.addAll(tempSizes);
 
 
@@ -96,9 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     means.add(FunctionHelperActivity.Mean(sizes));
                     vars.add(FunctionHelperActivity.Var(sizes));
-                    Log.d("meansvarsizes", String.valueOf(sizes));
-                    Log.d("meansvar", String.valueOf(means));
-                    Log.d("meansvars", String.valueOf(vars));
 
                 }
 
