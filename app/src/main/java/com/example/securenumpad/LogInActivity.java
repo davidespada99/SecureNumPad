@@ -32,7 +32,7 @@ public class LogInActivity extends AppCompatActivity {
     private boolean isRealUser;
     private double mean;
     private double var;
-
+    private String pinToInsert = "";
     private int userCurrentConfusionMatrix;
 
     @Override
@@ -48,8 +48,21 @@ public class LogInActivity extends AppCompatActivity {
 
         UserId = FunctionHelperActivity.getCurrentUserId();
         isRealUser = FunctionHelperActivity.isIsRealUser();
-
+        ArrayList<Double>[] userInfo;
         sizes = new ArrayList<>();
+        Log.d("onCreate LoginActivity 1", "Tryng get info: ");
+        try {
+            userInfo = getUserInfo();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Log.d("onCreate LoginActivity", "onCreate: " + UserId + " " + isRealUser + " " + sizes + " " + Arrays.toString(userInfo) + " " + pinToInsert);
+
+        //////////// temp code to move //////////////
+        EditText displayData = findViewById(R.id.display_data);
+        String text = "Insert the following PIN " + pinToInsert;
+        displayData.setText(text);
+
 
     }
 
@@ -101,21 +114,31 @@ public class LogInActivity extends AppCompatActivity {
 
     private ArrayList<Double>[] getUserInfo() throws IOException {
         ArrayList<Double>[] userInfo = new ArrayList[2];
-        String filename = "";
+        userInfo[0] = new ArrayList<Double>();
+        userInfo[1] = new ArrayList<Double>();
+        String filename = "UserStatistics.csv";
         int l;
         //Retrieve informazioni dal CSV
         ArrayList<String> userInfoRecord = parseCSVUserInfo(filename, UserId);
+        Log.d("After parseCSVUserInfo ", "1 getUserInfo: " + userInfoRecord);
         l = userInfoRecord.size();
+        Log.d("GetUserInfo", "2 getUserInfo: " + userInfoRecord);
+
+        //SET PIN TO INSERT (MAYBE CAN BE MOVED)
+        pinToInsert = userInfoRecord.get(1);
+
 
         for (int i = 2; i < l; i ++){
-            if (  i < (l-2)/2 ) {
-                userInfo[0].add(Double.valueOf(userInfoRecord.get(i)));
+            double valToInsert = Double.valueOf(userInfoRecord.get(i));
+            Log.d("GetUserInfo", "3 getUserInfo userInfo: " + userInfo.toString() + " adding " + valToInsert);
+            if (  i < (l+2)/2 ) {
+                userInfo[0].add(valToInsert);
             }else{
-               userInfo[1].add( Double.valueOf(userInfoRecord.get(i)) );
+               userInfo[1].add( valToInsert );
             }
         }
 
-
+        Log.d("GetUserInfo", "return getUserInfo: userInfo" + Arrays.toString(userInfo));
         return userInfo;
 
     }
@@ -133,18 +156,25 @@ public class LogInActivity extends AppCompatActivity {
         InputStream inputStream = null;
         File file;
         try{
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "logData.csv");
+            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
             inputStream = new FileInputStream(file);
 
-            Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            Reader reader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
 
+            Log.d("After new file", "parseCSVUserInfo: File exixts?" + file.exists());
             String line;
 
             while((line = bufferedReader.readLine()) != null){
                 String[] tokens = line.split(",");
-                if(tokens.length > 1 && tokens[1].equals(String.valueOf(userId))){
+                Log.d("After new file", "parseCSVUserInfo: line = " + line);
+                Log.d("After new file", "parseCSVUserInfo: token = " + Arrays.toString(tokens));
+                Log.d("After new file", "parseCSVUserInfo: userId = " + userId + "tokens[0] = " +tokens[0]);
+                Log.d("After new file", "parseCSVUserInfo: tokens.length > 1 = " + (tokens.length > 1) + " tokens[0].equals(String.valueOf(userId) = " + (tokens[0].equals(String.valueOf(userId))));
+                if(tokens.length > 1 && tokens[0].equals(String.valueOf(userId))){
+
                     userRecord = new ArrayList<>(Arrays.asList(tokens));
+                    Log.d("After new file", "parseCSVUserInfo: userRecord = " + userRecord);
                     break;
                 }
          ;;   }
