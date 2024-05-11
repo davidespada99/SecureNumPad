@@ -163,8 +163,8 @@ public class FunctionHelperActivity extends AppCompatActivity {
         bw.close();
     }
 
-    public static void csvWriterStats(int UserId, String pin ,ArrayList means, ArrayList vars) throws IOException {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "UserStatistics.csv");
+    public static void csvWriterRegistration(int UserId, String pin ,ArrayList means, ArrayList vars) throws IOException {
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "UserRegisterStats.csv");
         FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
         BufferedWriter bw = new BufferedWriter(fw);
         int l = 0;
@@ -188,7 +188,6 @@ public class FunctionHelperActivity extends AppCompatActivity {
         Log.d("means", String.valueOf(means));
         Log.d("vars", String.valueOf(vars));
         toWriteOnCsv = new StringBuilder(UserId + "," + pin);
-
 
 
 

@@ -2,13 +2,11 @@ package com.example.securenumpad;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
     private final int NUMBEROFREGISTRATION = 10;
@@ -50,9 +47,13 @@ public class RegisterActivity extends AppCompatActivity {
         vars = new ArrayList<>();
         sizes = new ArrayList<>();
         tempSizes = new ArrayList<>();
-        //=============================================== AddUserEntry() aggiungo utente e pin al file di match tra pin e utente  =============================================== //
-            //Controllo se l'id esiste già lo sovrascrivo
-            //Controllo se il file User{id}Stats.csv esiste già, lo elimino e creo nuovo file
+
+        // TO REMOVE AFTER CREATING THE FILE
+        /*try {
+            CSVHandler.CreateUserLoginStatisticsCSV();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
 
@@ -101,7 +102,8 @@ public class RegisterActivity extends AppCompatActivity {
             if(currentNumberOfRegistration == NUMBEROFREGISTRATION){
                 // ================================================ createUserStatsCSV(); ================================================
                 Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                FunctionHelperActivity.csvWriterStats(currentUserId, randomPIN, means, vars);
+                UserRegistrationStat userRegistrationStat = new UserRegistrationStat(currentUserId, randomPIN, means, vars);
+                CSVHandler.CSVWriter("UserRegistrationStats.csv",userRegistrationStat);
                 startActivity(intent);
             }
             logData = "";
