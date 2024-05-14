@@ -105,6 +105,8 @@ public class LogInActivity extends AppCompatActivity {
                     if (userIndex >= users.size()) {
                         Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                         startActivity(intent);
+
+                        userIndex=0; // !!!!!! DON'T DELETE THIS !!!!!
                     }
                     PIN = users.get(userIndex).getPIN();
                     currentAttempt = 1;
