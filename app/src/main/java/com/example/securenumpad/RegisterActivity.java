@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void updateAttempts() {
         EditText displayData = findViewById(R.id.display_data);
         currentNumberOfRegistration++;
-        String text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(PIN);
+        String text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-(currentNumberOfRegistration-1)) +" times: \n" + String.valueOf(PIN);
         displayData.setText(text);
     }
 
@@ -131,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
         EditText displayPin = (EditText) findViewById(R.id.display_pin);
 
         String text = "";
-        text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(PIN);
+        text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-(currentNumberOfRegistration-1)) +" times: \n" + String.valueOf(PIN);
         displayData.setText(text);
 
         if (displayPin.getText().length() == 4 && displayPin.getText().toString().equals(PIN)) {

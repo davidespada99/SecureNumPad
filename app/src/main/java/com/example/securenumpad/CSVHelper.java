@@ -48,7 +48,7 @@ public class CSVHelper {
                     Log.d("FILEISFILE", "writing header: " + header);
                     bw.write(header);
                     if(tableCode.equals("User")){
-                        ArrayList<User> users = User.createRandomUserPINTable(20, 4);
+                        ArrayList<User> users = User.createRandomUserPINTable(3, 4);
                         for (User user: users){
                             bw.write(user.fromObjectToCSVRow());
                         }
