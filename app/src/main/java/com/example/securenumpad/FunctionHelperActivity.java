@@ -67,8 +67,6 @@ public class FunctionHelperActivity extends AppCompatActivity {
         FunctionHelperActivity.isRealUser = isRealUser;
     }
 
-
-
     public static int getCurrentUserId() {
         return currentUserId;
     }
@@ -136,84 +134,6 @@ public class FunctionHelperActivity extends AppCompatActivity {
             userIdText.setText(String.valueOf(currId + 1));
         }
     }
-
-    public static void csvWriter() throws IOException {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "logData.csv");
-        FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-        BufferedWriter bw = new BufferedWriter(fw);
-
-        if(!file.exists()){
-            // If file doesn't exist, create it
-            try {
-                if (file.createNewFile()) {
-                    Log.d("File", "file created");
-                } else {
-                    Log.d("File", "file NOT created");
-                }
-            } catch (IOException e) {
-                throw  new  RuntimeException(e);
-            }
-        }
-
-        if(file.length()<=0){
-            bw.write("getSize, UserID, attempt_num, buttonID, buttonNumber\n");
-        }
-
-        bw.write(getLogDataToCSV());
-        bw.close();
-    }
-
-    public static void csvWriterRegistration(int UserId, String pin ,ArrayList means, ArrayList vars) throws IOException {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "UserRegisterStats.csv");
-        FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        int l = 0;
-        if(!file.exists()){
-            // If file doesn't exist, create it
-            try {
-                if (file.createNewFile()) {
-                    Log.d("csvWriterStats", "file created");
-                } else {
-                    Log.d("csvWriterStats", "file NOT created");
-                }
-            } catch (IOException e) {
-                throw  new  RuntimeException(e);
-            }
-        }
-
-        if(file.length()<=0){
-            bw.write("UserID, PIN, Mean1, Mean2, Mean5, Mean10, Var1, Var2, Var5, Var10\n");
-        }
-        StringBuilder toWriteOnCsv = new StringBuilder();
-        Log.d("means", String.valueOf(means));
-        Log.d("vars", String.valueOf(vars));
-        toWriteOnCsv = new StringBuilder(UserId + "," + pin);
-
-
-
-        for(Object mean : means){
-            toWriteOnCsv.append(",").append(String.valueOf(mean));
-        }
-        for(Object var : vars){
-            toWriteOnCsv.append(",").append(String.valueOf(var));
-        }
-        toWriteOnCsv.append("\n");
-
-        bw.write(toWriteOnCsv.toString());
-        Log.d("WRITINGCSV", "csvWriterStats: " + toWriteOnCsv);
-        bw.close();
-    }
-
-
-    //Output a random 4 digits PIN
-    public static String randomPIN(){
-        Random random = new Random();
-        int randomNumber = random.nextInt(10000);
-        pinToInsert = String.format(Locale.getDefault(), "%04d", randomNumber);
-        return pinToInsert;
-    }
-
-
 
     public static double Mean(ArrayList<Double> data){
         int length = data.size();

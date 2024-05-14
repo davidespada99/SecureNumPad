@@ -16,10 +16,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
-    int currentUserId = 1;
+    public static User currentSessionUser;
     boolean isRealUser = true;
 
     @Override
@@ -49,9 +50,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void CreateUserLoginStatCSV() {
+        // Create empty files if doesn't exixts
+        CSVHelper.createTable("User");
+        CSVHelper.createTable("Registration");
+        CSVHelper.createTable("Login");
+        updateCurrentSessionUser(1);
     }
 
     public void incrementNumber(View view) {
@@ -60,8 +63,10 @@ public class HomeActivity extends AppCompatActivity {
         int updatedUserId = ++currentUserId;
         userIdTextView.setText( String.valueOf(updatedUserId) );
         FunctionHelperActivity.setCurrentUserId(updatedUserId);
-
+        updateCurrentSessionUser(FunctionHelperActivity.getCurrentUserId());
     }
+
+
 
     public void decrementNumber(View view) {
         TextView userIdTextView = findViewById(R.id.user_id_textview);
@@ -72,14 +77,24 @@ public class HomeActivity extends AppCompatActivity {
             userIdTextView.setText( String.valueOf(updatedUserId) );
             FunctionHelperActivity.setCurrentUserId(updatedUserId);
         }
-
+        updateCurrentSessionUser(FunctionHelperActivity.getCurrentUserId());
 
     }
 
     public void swapRealUser(View view) {
         boolean switchValue = ((Switch)view).isChecked();
         FunctionHelperActivity.setIsRealUser(switchValue);
+        currentSessionUser.setIsRealUser(switchValue);
+    }
 
+    private void updateCurrentSessionUser(int currentUserId) {
+
+        ArrayList<User> users = CSVHelper.CSVToUser();
+        currentSessionUser = User.getUserByID(users, currentUserId);
+        Log.d("UpdatingSessionUser", "USER -> " + currentSessionUser.getID() + " " + currentSessionUser.getPIN() );
 
     }
+
+
+
 }

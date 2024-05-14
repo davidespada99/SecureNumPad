@@ -2,6 +2,7 @@ package com.example.securenumpad;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +18,14 @@ import java.util.Arrays;
 
 public class RegisterActivity extends AppCompatActivity {
     private final int NUMBEROFREGISTRATION = 10;
-    private int currentNumberOfRegistration = 0;
-    String randomPIN = FunctionHelperActivity.randomPIN();
+    private int currentNumberOfRegistration = 1;
+    String PIN;
     private int currentUserId = FunctionHelperActivity.getCurrentUserId();
 
     private ArrayList<Integer> sampleNumbers = new ArrayList<>(Arrays.asList(1, 2, 5, 10));
+    private ArrayList<Registration> tmpRegistrations;
 
-    private ArrayList<Double> means;
-    private ArrayList<Double> vars;
-
-
-
-    private ArrayList<Double> sizes;
-    private ArrayList<Double> tempSizes;
+    private static Registration currentRegistration;
 
 
 
@@ -38,29 +34,24 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FunctionHelperActivity.setCurrentInsertedPin("");
-        FunctionHelperActivity.setLogDataToCSV("");
         setContentView(R.layout.activity_pad);
         ViewGroup rootLayout = findViewById(android.R.id.content);
-        FunctionHelperActivity.initializeButtons(rootLayout);
-        updatePinData(randomPIN);
-        means = new ArrayList<>();
-        vars = new ArrayList<>();
-        sizes = new ArrayList<>();
-        tempSizes = new ArrayList<>();
 
-        // TO REMOVE AFTER CREATING THE FILE
-        /*try {
-            CSVHandler.CreateUserLoginStatisticsCSV();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+
+        FunctionHelperActivity.initializeButtons(rootLayout);
+
+
+        PIN = HomeActivity.currentSessionUser.getPIN();
+        updatePinData();
+
+        currentRegistration = new Registration();
+        tmpRegistrations = new ArrayList<>();
     }
 
 
     public void onButtonClicked(View v) throws IOException {
         //button
         Button button = (Button) v;
-        String buttonId = String.valueOf(button.getId());
         String buttonNumber = (String) button.getText();
 
         //Aggiorna il PIN
@@ -68,29 +59,29 @@ public class RegisterActivity extends AppCompatActivity {
         //Aggiorna il display del PIN
         updateDisplayPin(buttonNumber);
         //Aggiorna il display delle Info
-        updatePinData(randomPIN);
+        updatePinData();
 
-        String logData = String.valueOf(currentUserId) + ","
-                + currentNumberOfRegistration + ","
-                + buttonId + ","
-                + buttonNumber + "\n";
+        currentRegistration.setID(HomeActivity.currentSessionUser.getID());
+        currentRegistration.setAttempt(currentNumberOfRegistration);
+        currentRegistration.setButtonID(Integer.parseInt(buttonNumber));
 
-        FunctionHelperActivity.setLogDataToCSV(FunctionHelperActivity.getLogDataToCSV() + logData);
+
+        tmpRegistrations.add(new Registration(currentRegistration));
+        Log.d("CURRENTREGISTRATION", tmpRegistrations.toString() );
 
 
         //Handler of the PIN when reach the desired length
         if(FunctionHelperActivity.getCurrentInsertedPin().length()==4) {
             //write in csv only if right pin!
-            if(FunctionHelperActivity.getCurrentInsertedPin().equals(randomPIN)) {
+            if(FunctionHelperActivity.getCurrentInsertedPin().equals(PIN)) {
                 //Log data in csv
                 //FunctionHelperActivity.csvWriter();
-                sizes.addAll(tempSizes);
+                //sizes.addAll(tempSizes);
+                CSVHelper.RegistrationToCSV(tmpRegistrations, true);
+
+                if ( sampleNumbers.contains(currentNumberOfRegistration) ){
 
 
-                if ( sampleNumbers.contains(currentNumberOfRegistration + 1) ){
-
-                    means.add(FunctionHelperActivity.Mean(sizes));
-                    vars.add(FunctionHelperActivity.Var(sizes));
 
                 }
 
@@ -102,14 +93,12 @@ public class RegisterActivity extends AppCompatActivity {
             if(currentNumberOfRegistration == NUMBEROFREGISTRATION){
                 // ================================================ createUserStatsCSV(); ================================================
                 Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                UserRegistrationStat userRegistrationStat = new UserRegistrationStat(currentUserId, randomPIN, means, vars);
-                CSVHandler.CSVWriter("UserRegistrationStats.csv",userRegistrationStat);
+
                 startActivity(intent);
             }
-            logData = "";
             FunctionHelperActivity.setCurrentInsertedPin("");
             FunctionHelperActivity.setLogDataToCSV("");
-            tempSizes.clear();
+            tmpRegistrations.clear();
         }
 
     }
@@ -120,14 +109,13 @@ public class RegisterActivity extends AppCompatActivity {
     private void updateAttempts() {
         EditText displayData = findViewById(R.id.display_data);
         currentNumberOfRegistration++;
-        String text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(randomPIN);
+        String text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(PIN);
         displayData.setText(text);
     }
 
     public void updateDisplayPin(String buttonNumber) {
-
-
         String pinToWrite = FunctionHelperActivity.getCurrentInsertedPin();
+
         //if pinView > 4 --> reset to the current number pressed
         if(pinToWrite.length() > 4 ) pinToWrite = buttonNumber;
 
@@ -138,19 +126,19 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //--------------------INSERT INTO FUNCTION HELPER !!!!
-    public void  updatePinData(String randomPIN){
+    public void  updatePinData(){
         EditText displayData = (EditText) findViewById(R.id.display_data);
         EditText displayPin = (EditText) findViewById(R.id.display_pin);
 
         String text = "";
-        text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(randomPIN);
+        text = "Insert the following PIN "+ String.valueOf(NUMBEROFREGISTRATION-currentNumberOfRegistration) +" times: \n" + String.valueOf(PIN);
         displayData.setText(text);
 
-        if (displayPin.getText().length() == 4 && displayPin.getText().toString().equals(randomPIN)) {
+        if (displayPin.getText().length() == 4 && displayPin.getText().toString().equals(PIN)) {
             //Display error message
             Toast.makeText(getApplicationContext(), "Right PIN! ", Toast.LENGTH_SHORT).show();
 
-        } else if (displayPin.getText().length() == 4 && !displayPin.getText().toString().equals(randomPIN)) {
+        } else if (displayPin.getText().length() == 4 && !displayPin.getText().toString().equals(PIN)) {
             //Display error message
             Toast.makeText(getApplicationContext(), "Wrong PIN! ", Toast.LENGTH_SHORT).show();
             //Delete last 4 lines from csv;
@@ -164,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
             double size = event.getSize();
             toLog = String.valueOf(size) + ",";
             FunctionHelperActivity.setLogDataToCSV(FunctionHelperActivity.getLogDataToCSV() + toLog);
-            tempSizes.add(size);
+            currentRegistration.setGetSize(size);
 
         }
 

@@ -29,8 +29,6 @@ public class LogInActivity extends AppCompatActivity {
     double loginVar;
     private int userID;
     private boolean isRealUser;
-    private UserLoginStat userLoginStat;
-    private UserRegistrationStat userRegistrationStat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,22 +45,6 @@ public class LogInActivity extends AppCompatActivity {
         sizes = new ArrayList<>();
 
 
-        try {
-            ArrayList<String> userRegistrationRecord = parseCSV("UserRegistrationStats.csv", userID);
-            userRegistrationStat = new UserRegistrationStat(userRegistrationRecord);
-
-            userLoginStat = CSVHandler.FromCSVReaderToUserLoginStat(userID);
-            Log.d("CSVHandler.FromCSVReaderToUserLoginStat returned ", "onCreate: " + userLoginStat.getID() + " " + userLoginStat.getConfusionMatrix());
-            CSVHandler.CSVUpdateUserLoginStats(userLoginStat);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        //////////// temp code to move //////////////
-        EditText displayData = findViewById(R.id.display_data);
-        String text = "Insert the following PIN " + userRegistrationStat.getPIN();
-        displayData.setText(text);
 
 
     }
@@ -90,16 +72,6 @@ public class LogInActivity extends AppCompatActivity {
             loginMean = FunctionHelperActivity.Mean(sizes);
             loginVar = FunctionHelperActivity.Var(sizes);
 
-            ArrayList<Boolean> isLoginPermitted = InformationChecker.checkLoginInfo(loginMean, loginVar, userRegistrationStat);
-
-            Log.d("isLoginPermitted", "onClicked: " + isLoginPermitted);
-
-            //With this array, we have to update the user confusion matrixes
-            userLoginStat.updateConfusionMatrix(isLoginPermitted, isRealUser);
-
-            //Remember that the order is TPx FPx TNx FNx
-            CSVHandler.CSVUpdateUserLoginStats(userLoginStat);
-
 
         }
 
@@ -120,21 +92,6 @@ public class LogInActivity extends AppCompatActivity {
         }
 
         return super.dispatchTouchEvent(event);
-    }
-
-
-    // METHOD TO GET LOGIN AND REGISTRATION USER INFO
-    private UserLoginStat getUserLoginStat(String filename, int userID) throws IOException {
-        int l;
-        //Retrieve information from CSV
-        ArrayList<String> userInfoRecord = CSVHandler.CSVReader(filename, userID);
-        ArrayList<Integer> confsionMatrixes = new ArrayList<>();
-
-        //SET PIN TO INSERT (MAYBE CAN BE MOVED)
-        for (int i = 1; i < userInfoRecord.size(); i ++){
-            confsionMatrixes.add(Integer.parseInt(userInfoRecord.get(i)));
-        }
-        return new UserLoginStat(Integer.parseInt(userInfoRecord.get(0)), confsionMatrixes);
     }
 
 
