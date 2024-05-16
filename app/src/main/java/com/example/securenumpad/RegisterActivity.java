@@ -79,23 +79,18 @@ public class RegisterActivity extends AppCompatActivity {
                 //sizes.addAll(tempSizes);
                 CSVHelper.RegistrationToCSV(tmpRegistrations, true);
 
-                if ( sampleNumbers.contains(currentNumberOfRegistration) ){
+                //If we inserted NUMBEROFREGISTRATION times the correct PIN, we finished the registration and come back to the home activity
+                if(currentNumberOfRegistration == NUMBEROFREGISTRATION){
+                    // ================================================ createUserStatsCSV(); ================================================
+                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
 
-
-
+                    startActivity(intent);
                 }
-
                 //Update display data
                 updateAttempts();
             }
 
-            //If we inserted NUMBEROFREGISTRATION times the correct PIN, we finished the registration and come back to the home activity
-            if(currentNumberOfRegistration == NUMBEROFREGISTRATION){
-                // ================================================ createUserStatsCSV(); ================================================
-                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
 
-                startActivity(intent);
-            }
             FunctionHelperActivity.setCurrentInsertedPin("");
             FunctionHelperActivity.setLogDataToCSV("");
             tmpRegistrations.clear();

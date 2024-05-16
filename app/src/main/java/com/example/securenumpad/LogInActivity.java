@@ -38,7 +38,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private int currentAttempt = 1;
 
-    private int MAXATTEMPTS = 2;
+    private int MAXATTEMPTS = 4;
 
     private ArrayList<Login> tmpLogins;
     private ArrayList<User> users;
